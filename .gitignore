@@ -1,0 +1,6 @@
+build.nx/
+romfs/shaders/
+mangadex-reader.nro
+mangadex-reader.nacp
+mangadex-reader.elf
+*.map
