@@ -21,6 +21,19 @@ conteúdo fã e só sobra o link para o site oficial). Quando um capítulo só
 existe como link externo, o app mostra isso claramente na lista (em cinza,
 sem poder abrir) em vez de tentar carregá-lo.
 
+## Instalação
+
+Requer um Switch com Atmosphère (ou outro CFW com suporte a homebrew) já
+configurado.
+
+1. Baixe o `mangadex-reader.nro` da [página de
+   Releases](https://github.com/gomprime/mangadex-reader/releases/latest).
+2. Copie o arquivo para `sdmc:/switch/mangadex-reader/mangadex-reader.nro`
+   no cartão SD do console (crie as pastas `switch/mangadex-reader/` se
+   ainda não existirem).
+3. Abra o Album Homebrew Menu (hbmenu) no console e selecione
+   "MangaDex Reader" na lista.
+
 ## Funcionalidades
 
 - Busca por título, navegação por novidades/populares
@@ -42,8 +55,8 @@ export DEVKITPRO=/opt/devkitpro   # ajuste pro seu caminho
 make
 ```
 
-Gera `mangadex-reader.nro` — copie para `sdmc:/switch/mangadex-reader/` num
-Switch com Atmosphère e abra pelo menu de homebrew.
+Gera `mangadex-reader.nro` — veja a seção [Instalação](#instalação) acima
+pra colocá-lo no cartão SD.
 
 ## Créditos
 
