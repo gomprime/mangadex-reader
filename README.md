@@ -43,6 +43,9 @@ configurado.
 - Filtro de idioma configurável (busca, novidades e capítulos)
 - Filtro de classificação de conteúdo
 - Cache de páginas/capas em disco com limite configurável
+- Interface em português e inglês, seguindo o idioma do sistema do console
+- Checagem de atualização em app (aba Sobre), com instalação direto pelo
+  próprio aplicativo
 
 ## Compilando
 

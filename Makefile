@@ -19,7 +19,7 @@ INCLUDES	:=	source external/curl-mbedtls/include external
 
 APP_TITLE	:=	MangaDex Reader
 APP_AUTHOR	:=	gomprime
-APP_VERSION	:=	1.0.1
+APP_VERSION	:=	1.0.2
 
 ROMFS				:=	romfs
 BOREALIS_PATH		:=	external/borealis
@@ -37,7 +37,7 @@ CFLAGS	:=	-g -Wall -O2 -ffunction-sections \
 
 CFLAGS	+=	$(INCLUDE) -D__SWITCH__
 
-CXXFLAGS	:= $(CFLAGS) -std=c++1z -O2 -Wno-volatile
+CXXFLAGS	:= $(CFLAGS) -std=c++1z -O2 -Wno-volatile -DAPP_VERSION_STRING=\"$(APP_VERSION)\"
 
 ASFLAGS	:=	-g $(ARCH)
 # -L for our own mbedTLS-backed libcurl.a comes before the portlibs search path

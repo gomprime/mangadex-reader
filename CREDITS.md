@@ -44,6 +44,10 @@ projeto - só estamos agradecendo e cumprindo as licenças de cada um.
   de nenhuma forma; é um cliente feito por fãs, usando a API do jeito que
   ela foi documentada e disponibilizada publicamente pela própria MangaDex
   para uso por terceiros.
+- **[GitHub REST API](https://docs.github.com/en/rest)** — usada só pra
+  checar a versão mais recente lançada neste próprio repositório (tela
+  Sobre), pra oferecer atualização em app. Nenhum dado do usuário é
+  enviado; é uma chamada anônima e pública ao endpoint de releases.
 
 ## Agradecimentos
 

@@ -1,6 +1,15 @@
 {
-    "version": "Versão 1.0.1",
+    "version": "Versão 1.0.2",
     "by": "Por gomprime",
     "thanks_header": "Agradecimentos",
-    "footer": "Leitor de mangás não-oficial usando a API pública do MangaDex."
+    "footer": "Leitor de mangás não-oficial usando a API pública do MangaDex.",
+    "update_header": "Atualização",
+    "checking_update": "Verificando atualizações...",
+    "up_to_date": "Você está na versão mais recente.",
+    "update_available": "Nova versão disponível: v{0}",
+    "update_check_failed": "Não foi possível checar atualizações ({0}).",
+    "download_button": "Baixar e instalar",
+    "downloading": "Baixando atualização...",
+    "update_installed": "Atualizado! Feche e abra o app de novo.",
+    "update_failed": "Falha ao instalar a atualização ({0})."
 }

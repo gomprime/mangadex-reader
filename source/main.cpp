@@ -6,6 +6,7 @@
 
 #include "storage/paths.hpp"
 #include "ui/main_activity.hpp"
+#include "util/app_path.hpp"
 #include "util/main_thread.hpp"
 #include "util/worker_thread.hpp"
 
@@ -31,6 +32,9 @@ namespace
 int main(int argc, char* argv[])
 {
     brls::Logger::setLogLevel(brls::LogLevel::INFO);
+
+    if (argc > 0 && argv[0])
+        util::setAppNroPath(argv[0]);
 
     curl_global_init(CURL_GLOBAL_DEFAULT);
     storage::EnsureDirectories();
