@@ -1,6 +1,8 @@
 #include "api/update_client.hpp"
 
+#include <cerrno>
 #include <cstdio>
+#include <cstring>
 #include <sstream>
 #include <vector>
 
@@ -124,15 +126,26 @@ bool UpdateClient::DownloadAndInstall(const std::string& downloadUrl, std::strin
         return false;
     }
 
-    // rename() atomically replaces nroPath on sdmc: if it already exists -
-    // a failed/interrupted download only ever touches the .tmp file, never
-    // the running .nro itself.
+    // Unlike POSIX, the Switch's sdmc devoptab rejects rename() if the
+    // destination already exists instead of overwriting it. Move the old
+    // .nro aside first (itself a rename, so it can't fail on that same
+    // ground) instead of deleting it outright, so a failed swap below still
+    // leaves a working install rather than none at all.
+    std::string bakPath = nroPath + ".bak";
+    remove(bakPath.c_str());
+    bool hadExisting = rename(nroPath.c_str(), bakPath.c_str()) == 0;
+
     if (rename(tmpPath.c_str(), nroPath.c_str()) != 0)
     {
-        errorOut = "couldn't replace the installed file";
+        errorOut = std::string("couldn't replace the installed file (") + strerror(errno) + ")";
         remove(tmpPath.c_str());
+        if (hadExisting)
+            rename(bakPath.c_str(), nroPath.c_str());
         return false;
     }
+
+    if (hadExisting)
+        remove(bakPath.c_str());
 
     return true;
 }

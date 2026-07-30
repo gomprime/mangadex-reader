@@ -19,7 +19,7 @@ INCLUDES	:=	source external/curl-mbedtls/include external
 
 APP_TITLE	:=	MangaDex Reader
 APP_AUTHOR	:=	gomprime
-APP_VERSION	:=	1.0.2
+APP_VERSION	:=	1.0.3
 
 ROMFS				:=	romfs
 BOREALIS_PATH		:=	external/borealis
