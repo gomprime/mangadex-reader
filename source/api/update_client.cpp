@@ -1,5 +1,7 @@
 #include "api/update_client.hpp"
 
+#include <switch.h>
+
 #include <cerrno>
 #include <cstdio>
 #include <cstring>
@@ -133,20 +135,37 @@ bool UpdateClient::DownloadAndInstall(const std::string& downloadUrl, std::strin
     // leaves a working install rather than none at all.
     std::string bakPath = nroPath + ".bak";
     remove(bakPath.c_str());
-    bool hadExisting = rename(nroPath.c_str(), bakPath.c_str()) == 0;
 
-    if (rename(tmpPath.c_str(), nroPath.c_str()) != 0)
+    // userAppInit() mounts romfs once at process startup and keeps it
+    // mounted (and nroPath's file handle open) for the whole run so its
+    // contents can be streamed on demand - that open handle is exactly
+    // what blocks renaming nroPath, even to a backup name. Unmount for
+    // just this swap; i18n strings are already cached in memory by this
+    // point, so status text still displays fine either way.
+    romfsExit();
+
+    bool hadExisting = rename(nroPath.c_str(), bakPath.c_str()) == 0;
+    bool installOk    = rename(tmpPath.c_str(), nroPath.c_str()) == 0;
+
+    if (!installOk)
     {
         errorOut = std::string("couldn't replace the installed file (") + strerror(errno) + ")";
         remove(tmpPath.c_str());
         if (hadExisting)
             rename(bakPath.c_str(), nroPath.c_str());
+
+        // Original file is back in place at the same offsets this process
+        // launched with, so remounting here is safe.
+        romfsInit();
         return false;
     }
 
     if (hadExisting)
         remove(bakPath.c_str());
 
+    // nroPath now holds a different build than what this process launched
+    // from, so its captured romfs offsets no longer apply - leave it
+    // unmounted; the success message tells the user to restart anyway.
     return true;
 }
 

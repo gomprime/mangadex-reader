@@ -19,7 +19,7 @@ INCLUDES	:=	source external/curl-mbedtls/include external
 
 APP_TITLE	:=	MangaDex Reader
 APP_AUTHOR	:=	gomprime
-APP_VERSION	:=	1.0.3
+APP_VERSION	:=	1.0.4
 
 ROMFS				:=	romfs
 BOREALIS_PATH		:=	external/borealis
@@ -213,6 +213,12 @@ else
 .PHONY:	all
 
 DEPENDS	:=	$(OFILES:.o=.d)
+
+# NOTE: APP_VERSION above is baked into APP_VERSION_STRING via CXXFLAGS, but
+# plain flag changes aren't tracked as a make dependency - bumping the
+# version alone will NOT force a rebuild of the .o that embeds it
+# (about_tab.o, for the update checker). Always `make clean` before building
+# a release after changing APP_VERSION.
 
 #---------------------------------------------------------------------------------
 # main targets
