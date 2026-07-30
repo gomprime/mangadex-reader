@@ -1,0 +1,17 @@
+{
+    "chapters_load_failed": "Não foi possível carregar os capítulos. Verifique sua conexão.",
+    "first_chapter_notify": "Este é o primeiro capítulo disponível.",
+    "header_chapter_suffix": " - Cap. {0}",
+    "hint": "D-pad/analógico: página   ZL/ZR: capítulo   Y: zoom   B: voltar",
+    "last_chapter_notify": "Este é o último capítulo disponível.",
+    "loading_chapters": "Carregando capítulos...",
+    "loading_page": "Carregando página...",
+    "next_chapter": "Próximo capítulo",
+    "next_page": "Próxima página",
+    "page_download_failed": "Falha ao baixar a página.",
+    "pages_load_failed": "Falha ao carregar as páginas. Verifique sua conexão.",
+    "prev_chapter": "Capítulo anterior",
+    "prev_page": "Página anterior",
+    "zoom_action": "Zoom",
+    "zoom_hint": "Zoom ativo: analógico esquerdo move a página (D-pad não troca de página)"
+}

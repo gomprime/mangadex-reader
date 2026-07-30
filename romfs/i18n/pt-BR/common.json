@@ -1,0 +1,8 @@
+{
+    "back": "Voltar",
+    "connection_error": "Erro de conexão ({0}). Verifique sua internet e tente de novo.",
+    "load_more": "Carregar mais",
+    "loading": "Carregando...",
+    "no_results": "Nenhum resultado encontrado.",
+    "no_title": "(sem título)"
+}

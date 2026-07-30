@@ -7,6 +7,8 @@
 #include "util/main_thread.hpp"
 #include "util/worker_thread.hpp"
 
+using namespace brls::literals;
+
 namespace ui
 {
 
@@ -75,7 +77,7 @@ brls::View* MangaDetailActivity::createContentView()
 
     this->continueButton = new brls::Button();
     this->continueButton->setStyle(&brls::BUTTONSTYLE_PRIMARY);
-    this->continueButton->setText("Ler do início");
+    this->continueButton->setText("detail/read_from_start"_i18n);
     this->continueButton->setDimensions(220.0f, 56.0f);
     this->continueButton->setMarginRight(12.0f);
     this->continueButton->registerClickAction([this](brls::View*) {
@@ -88,14 +90,14 @@ brls::View* MangaDetailActivity::createContentView()
                 return true;
             }
         }
-        brls::Application::notify("Escolha um capítulo na lista abaixo.");
+        brls::Application::notify("detail/pick_chapter_notify"_i18n);
         return true;
     });
     buttonRow->addView(this->continueButton);
 
     this->favoriteButton = new brls::Button();
     this->favoriteButton->setStyle(&brls::BUTTONSTYLE_BORDERED);
-    this->favoriteButton->setText("+ Biblioteca");
+    this->favoriteButton->setText("detail/add_library"_i18n);
     this->favoriteButton->setDimensions(200.0f, 56.0f);
     this->favoriteButton->registerClickAction([this](brls::View*) {
         if (storage::LibraryStore::Contains(this->manga.id))
@@ -128,7 +130,7 @@ brls::View* MangaDetailActivity::createContentView()
     root->addView(this->descriptionLabel);
 
     brls::Label* chaptersHeader = new brls::Label();
-    chaptersHeader->setText("Capítulos");
+    chaptersHeader->setText("detail/chapters_header"_i18n);
     chaptersHeader->setFontSize(22.0f);
     chaptersHeader->setHorizontalAlign(brls::HorizontalAlign::LEFT);
     chaptersHeader->setMarginTop(24.0f);
@@ -145,7 +147,7 @@ brls::View* MangaDetailActivity::createContentView()
 
 void MangaDetailActivity::onContentAvailable()
 {
-    this->registerAction("Voltar", brls::BUTTON_B, [](brls::View*) {
+    this->registerAction("common/back"_i18n, brls::BUTTON_B, [](brls::View*) {
         brls::Application::popActivity();
         return true;
     });
@@ -232,11 +234,11 @@ void MangaDetailActivity::appendChapters(const api::ChapterFeed& feed)
         if (!feed.ok)
         {
             std::string detail = feed.errorDetail.empty() ? ("HTTP " + std::to_string(feed.httpStatus)) : feed.errorDetail;
-            emptyLabel->setText("Erro de conexão (" + detail + ").\nVerifique sua internet e tente de novo.");
+            emptyLabel->setText(brls::getStr("common/connection_error", detail));
         }
         else
         {
-            emptyLabel->setText("Nenhum capítulo disponível no idioma configurado.");
+            emptyLabel->setText("detail/no_chapters"_i18n);
         }
         emptyLabel->setFontSize(16.0f);
         emptyLabel->setHorizontalAlign(brls::HorizontalAlign::LEFT);
@@ -257,12 +259,12 @@ void MangaDetailActivity::appendChapters(const api::ChapterFeed& feed)
         row->setAlignItems(brls::AlignItems::CENTER);
         row->setCornerRadius(6.0f);
 
-        std::string label = chapter.volume.empty() ? "" : ("Vol. " + chapter.volume + " ");
-        label += chapter.chapterNumber.empty() ? "Extra" : ("Cap. " + chapter.chapterNumber);
+        std::string label = chapter.volume.empty() ? "" : brls::getStr("detail/volume_label", chapter.volume);
+        label += chapter.chapterNumber.empty() ? "detail/extra_chapter"_i18n : brls::getStr("detail/chapter_label", chapter.chapterNumber);
         if (!chapter.title.empty())
             label += " - " + chapter.title;
         if (isExternal)
-            label += " (somente no site oficial)";
+            label += "detail/external_suffix"_i18n;
 
         brls::Label* rowLabel = new brls::Label();
         rowLabel->setText(label);
@@ -332,8 +334,8 @@ void MangaDetailActivity::refreshContinueReadingButton()
     // Plain ASCII, not a Unicode checkmark: the loaded font doesn't have
     // that glyph and it rendered as a missing-glyph box (same issue as the
     // Material Icons codepoints tried earlier for the settings arrows).
-    this->favoriteButton->setText(inLibrary ? "- Biblioteca" : "+ Biblioteca");
-    this->continueButton->setText(hasProgress ? ("Continuar (Cap. " + chapterLabel + ")") : "Escolha um capítulo");
+    this->favoriteButton->setText(inLibrary ? "detail/remove_library"_i18n : "detail/add_library"_i18n);
+    this->continueButton->setText(hasProgress ? brls::getStr("detail/continue_button", chapterLabel) : "detail/choose_chapter_button"_i18n);
 }
 
 } // namespace ui

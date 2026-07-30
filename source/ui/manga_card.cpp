@@ -5,6 +5,8 @@
 #include "util/main_thread.hpp"
 #include "util/worker_thread.hpp"
 
+using namespace brls::literals;
+
 namespace ui
 {
 
@@ -41,7 +43,7 @@ MangaCard::MangaCard(const api::Manga& manga, std::function<void()> onClick)
     textColumn->setGrow(1.0f);
 
     this->titleLabel = new brls::Label();
-    this->titleLabel->setText(manga.title.empty() ? "(sem título)" : manga.title);
+    this->titleLabel->setText(manga.title.empty() ? "common/no_title"_i18n : manga.title);
     this->titleLabel->setFontSize(20.0f);
     this->titleLabel->setHorizontalAlign(brls::HorizontalAlign::LEFT);
     textColumn->addView(this->titleLabel);

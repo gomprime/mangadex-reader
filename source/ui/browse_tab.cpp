@@ -8,6 +8,8 @@
 #include "util/main_thread.hpp"
 #include "util/worker_thread.hpp"
 
+using namespace brls::literals;
+
 namespace ui
 {
 
@@ -22,7 +24,7 @@ BrowseTab::BrowseTab()
     toggleRow->setMargins(16.0f, 16.0f, 8.0f, 16.0f);
 
     this->latestButton = new brls::Button();
-    this->latestButton->setText("Novidades");
+    this->latestButton->setText("tabs/latest"_i18n);
     this->latestButton->setStyle(&brls::BUTTONSTYLE_PRIMARY);
     this->latestButton->setDimensions(brls::View::AUTO, 56.0f);
     this->latestButton->setMarginRight(12.0f);
@@ -33,7 +35,7 @@ BrowseTab::BrowseTab()
     toggleRow->addView(this->latestButton);
 
     this->popularButton = new brls::Button();
-    this->popularButton->setText("Populares");
+    this->popularButton->setText("browse/popular"_i18n);
     this->popularButton->setStyle(&brls::BUTTONSTYLE_DEFAULT);
     this->popularButton->setDimensions(brls::View::AUTO, 56.0f);
     this->popularButton->registerClickAction([this](brls::View*) {
@@ -119,7 +121,7 @@ void BrowseTab::loadPage(bool reset)
         this->offset = 0;
         this->knownTotal = 0;
         this->clearResults();
-        this->setStatus("Carregando...");
+        this->setStatus("common/loading"_i18n);
     }
 
     // Just hide it here, don't removeView() it: loadPage(false) is called
@@ -189,13 +191,13 @@ void BrowseTab::appendResults(const api::SearchResult& result)
     if (!result.ok && this->resultsContainer->getChildren().empty())
     {
         std::string detail = result.errorDetail.empty() ? ("HTTP " + std::to_string(result.httpStatus)) : result.errorDetail;
-        this->setStatus("Erro de conexão (" + detail + ").\nVerifique sua internet e tente de novo.");
+        this->setStatus(brls::getStr("common/connection_error", detail));
         return;
     }
 
     if (result.items.empty() && this->resultsContainer->getChildren().empty())
     {
-        this->setStatus("Nenhum resultado encontrado.");
+        this->setStatus("common/no_results"_i18n);
         return;
     }
 
@@ -213,7 +215,7 @@ void BrowseTab::appendResults(const api::SearchResult& result)
     if (this->offset < this->knownTotal)
     {
         this->loadMoreButton = new brls::Button();
-        this->loadMoreButton->setText("Carregar mais");
+        this->loadMoreButton->setText("common/load_more"_i18n);
         this->loadMoreButton->setDimensions(brls::View::AUTO, 56.0f);
         this->loadMoreButton->setMargins(16.0f, 0.0f, 16.0f, 0.0f);
         this->loadMoreButton->registerClickAction([this](brls::View*) {

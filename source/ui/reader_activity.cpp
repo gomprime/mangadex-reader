@@ -10,6 +10,8 @@
 #include "util/main_thread.hpp"
 #include "util/worker_thread.hpp"
 
+using namespace brls::literals;
+
 namespace ui
 {
 
@@ -100,14 +102,14 @@ brls::View* ReaderActivity::createContentView()
     this->statusLabel = new brls::Label();
     this->statusLabel->setFontSize(22.0f);
     this->statusLabel->setHorizontalAlign(brls::HorizontalAlign::CENTER);
-    this->statusLabel->setText("Carregando...");
+    this->statusLabel->setText("common/loading"_i18n);
     this->statusLabel->setTextColor(nvgRGB(255, 255, 255));
     pageArea->addView(this->statusLabel);
 
     root->addView(pageArea);
 
     brls::Label* hintLabel = new brls::Label();
-    hintLabel->setText("D-pad/analógico: página   ZL/ZR: capítulo   Y: zoom   B: voltar");
+    hintLabel->setText("reader/hint"_i18n);
     hintLabel->setFontSize(16.0f);
     hintLabel->setHorizontalAlign(brls::HorizontalAlign::CENTER);
     hintLabel->setMargins(4.0f, 8.0f, 8.0f, 8.0f);
@@ -115,7 +117,7 @@ brls::View* ReaderActivity::createContentView()
     root->addView(hintLabel);
 
     this->zoomHintLabel = new brls::Label();
-    this->zoomHintLabel->setText("Zoom ativo: analógico esquerdo move a página (D-pad não troca de página)");
+    this->zoomHintLabel->setText("reader/zoom_hint"_i18n);
     this->zoomHintLabel->setFontSize(16.0f);
     this->zoomHintLabel->setHorizontalAlign(brls::HorizontalAlign::CENTER);
     this->zoomHintLabel->setMargins(0.0f, 8.0f, 8.0f, 8.0f);
@@ -133,24 +135,24 @@ void ReaderActivity::onContentAvailable()
     // both to - see switch_input.cpp). That stick is also used for zoom pan,
     // so while zoomed these must be ignored or panning would keep flipping
     // pages; BUTTON_LB/BUTTON_RB (physical shoulder buttons only) still work.
-    this->registerAction("Página anterior", brls::BUTTON_LEFT, [this](brls::View*) {
+    this->registerAction("reader/prev_page"_i18n, brls::BUTTON_LEFT, [this](brls::View*) {
         if (this->zoomed)
             return false;
         this->goToPrevPage();
         return true;
     });
-    this->registerAction("Próxima página", brls::BUTTON_RIGHT, [this](brls::View*) {
+    this->registerAction("reader/next_page"_i18n, brls::BUTTON_RIGHT, [this](brls::View*) {
         if (this->zoomed)
             return false;
         this->goToNextPage();
         return true;
     });
-    this->registerAction("Página anterior", brls::BUTTON_LB, [this](brls::View*) { this->goToPrevPage(); return true; });
-    this->registerAction("Próxima página", brls::BUTTON_RB, [this](brls::View*) { this->goToNextPage(); return true; });
-    this->registerAction("Capítulo anterior", brls::BUTTON_LT, [this](brls::View*) { this->goToPrevChapter(); return true; });
-    this->registerAction("Próximo capítulo", brls::BUTTON_RT, [this](brls::View*) { this->goToNextChapter(); return true; });
-    this->registerAction("Voltar", brls::BUTTON_B, [this](brls::View*) { this->goBack(); return true; });
-    this->registerAction("Zoom", brls::BUTTON_Y, [this](brls::View*) { this->toggleZoom(); return true; });
+    this->registerAction("reader/prev_page"_i18n, brls::BUTTON_LB, [this](brls::View*) { this->goToPrevPage(); return true; });
+    this->registerAction("reader/next_page"_i18n, brls::BUTTON_RB, [this](brls::View*) { this->goToNextPage(); return true; });
+    this->registerAction("reader/prev_chapter"_i18n, brls::BUTTON_LT, [this](brls::View*) { this->goToPrevChapter(); return true; });
+    this->registerAction("reader/next_chapter"_i18n, brls::BUTTON_RT, [this](brls::View*) { this->goToNextChapter(); return true; });
+    this->registerAction("common/back"_i18n, brls::BUTTON_B, [this](brls::View*) { this->goBack(); return true; });
+    this->registerAction("reader/zoom_action"_i18n, brls::BUTTON_Y, [this](brls::View*) { this->toggleZoom(); return true; });
 
     this->loadChapterList();
 }
@@ -241,7 +243,7 @@ void ReaderActivity::pollZoomPan(float stickX, float stickY)
 
 void ReaderActivity::loadChapterList()
 {
-    this->setStatus("Carregando capítulos...");
+    this->setStatus("reader/loading_chapters"_i18n);
 
     util::AliveFlag aliveCopy = this->alive;
     std::string mangaId = this->manga.id;
@@ -257,7 +259,7 @@ void ReaderActivity::loadChapterList()
 
             if (feed.items.empty())
             {
-                this->setStatus("Não foi possível carregar os capítulos.\nVerifique sua conexão.");
+                this->setStatus("reader/chapters_load_failed"_i18n);
                 return;
             }
 
@@ -291,7 +293,7 @@ void ReaderActivity::openChapterByIndex(int index)
 
 void ReaderActivity::loadCurrentChapterPages()
 {
-    this->setStatus("Carregando página...");
+    this->setStatus("reader/loading_page"_i18n);
 
     util::AliveFlag aliveCopy = this->alive;
     std::string chapterId = this->chapters[this->currentChapterIndex].id;
@@ -307,7 +309,7 @@ void ReaderActivity::loadCurrentChapterPages()
 
             if (!result.ok)
             {
-                this->setStatus("Falha ao carregar as páginas.\nVerifique sua conexão.");
+                this->setStatus("reader/pages_load_failed"_i18n);
                 return;
             }
 
@@ -333,7 +335,7 @@ void ReaderActivity::showPage(int pageIndex)
 
     this->currentPage = pageIndex;
     this->pageCounterLabel->setText(std::to_string(pageIndex + 1) + " / " + std::to_string(this->currentPageUrls.size()));
-    this->setStatus("Carregando página...");
+    this->setStatus("reader/loading_page"_i18n);
     this->resetZoom();
 
     util::AliveFlag aliveCopy = this->alive;
@@ -350,7 +352,7 @@ void ReaderActivity::showPage(int pageIndex)
 
             if (path.empty())
             {
-                this->setStatus("Falha ao baixar a página.");
+                this->setStatus("reader/page_download_failed"_i18n);
                 return;
             }
 
@@ -410,7 +412,7 @@ void ReaderActivity::goToNextChapter()
     }
     else
     {
-        brls::Application::notify("Este é o último capítulo disponível.");
+        brls::Application::notify("reader/last_chapter_notify"_i18n);
     }
 }
 
@@ -423,7 +425,7 @@ void ReaderActivity::goToPrevChapter()
     }
     else
     {
-        brls::Application::notify("Este é o primeiro capítulo disponível.");
+        brls::Application::notify("reader/first_chapter_notify"_i18n);
     }
 }
 
@@ -463,7 +465,7 @@ void ReaderActivity::updateHeaderLabel()
     const api::Chapter& chapter = this->chapters[this->currentChapterIndex];
     std::string text = this->manga.title;
     if (!chapter.chapterNumber.empty())
-        text += " - Cap. " + chapter.chapterNumber;
+        text += brls::getStr("reader/header_chapter_suffix", chapter.chapterNumber);
     if (!chapter.title.empty())
         text += ": " + chapter.title;
 

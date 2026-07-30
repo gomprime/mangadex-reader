@@ -7,6 +7,8 @@
 #include "ui/manga_detail_activity.hpp"
 #include "ui/reader_activity.hpp"
 
+using namespace brls::literals;
+
 namespace ui
 {
 
@@ -72,7 +74,7 @@ void LibraryTab::reload()
 
     if (entries.empty())
     {
-        this->statusLabel->setText("Sua biblioteca está vazia.\nAdicione mangás pela busca ou novidades.");
+        this->statusLabel->setText("library/empty"_i18n);
         this->statusLabel->setVisibility(brls::Visibility::VISIBLE);
         return;
     }
@@ -86,8 +88,8 @@ void LibraryTab::reload()
         manga.title = entry.title;
         manga.coverFileName = entry.coverFileName;
         manga.status = entry.lastReadChapterId.empty()
-            ? "Na biblioteca"
-            : ("Continuar: Cap. " + entry.lastReadChapterNumber);
+            ? "library/in_library"_i18n
+            : brls::getStr("library/continue_chapter", entry.lastReadChapterNumber);
 
         storage::LibraryEntry entryCopy = entry;
         MangaCard* card = new MangaCard(manga, [manga, entryCopy]() {

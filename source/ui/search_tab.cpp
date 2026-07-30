@@ -10,6 +10,8 @@
 #include "util/main_thread.hpp"
 #include "util/worker_thread.hpp"
 
+using namespace brls::literals;
+
 namespace ui
 {
 
@@ -20,7 +22,7 @@ SearchTab::SearchTab()
 
     this->searchButton = new brls::Button();
     this->searchButton->setStyle(&brls::BUTTONSTYLE_PRIMARY);
-    this->searchButton->setText("Buscar mangá");
+    this->searchButton->setText("search/search_button"_i18n);
     this->searchButton->setDimensions(brls::View::AUTO, 60.0f);
     this->searchButton->setMargins(16.0f, 16.0f, 8.0f, 16.0f);
     this->searchButton->registerClickAction([this](brls::View*) {
@@ -37,7 +39,7 @@ SearchTab::SearchTab()
     contentArea->setWidthPercentage(100.0f);
 
     this->statusLabel = new brls::Label();
-    this->statusLabel->setText("Toque em \"Buscar mangá\" para pesquisar.");
+    this->statusLabel->setText("search/prompt"_i18n);
     this->statusLabel->setFontSize(18.0f);
     this->statusLabel->setHorizontalAlign(brls::HorizontalAlign::CENTER);
     this->statusLabel->setMargins(8.0f, 16.0f, 8.0f, 16.0f);
@@ -88,7 +90,7 @@ void SearchTab::openKeyboard()
         if (!text.empty())
             this->performSearch(text, true);
     },
-        "Buscar mangá", "Digite o título do mangá", 64, this->currentQuery);
+        "search/search_button"_i18n, "search/keyboard_subtext"_i18n, 64, this->currentQuery);
 }
 
 void SearchTab::performSearch(const std::string& query, bool reset)
@@ -99,7 +101,7 @@ void SearchTab::performSearch(const std::string& query, bool reset)
         this->offset = 0;
         this->knownTotal = 0;
         this->clearResults();
-        this->setStatus("Buscando \"" + query + "\"...");
+        this->setStatus(brls::getStr("search/searching", query));
     }
 
     // Just hide it here, don't removeView() it: performSearch(false) is
@@ -166,13 +168,13 @@ void SearchTab::appendResults(const api::SearchResult& result)
     if (!result.ok && this->resultsContainer->getChildren().empty())
     {
         std::string detail = result.errorDetail.empty() ? ("HTTP " + std::to_string(result.httpStatus)) : result.errorDetail;
-        this->setStatus("Erro de conexão (" + detail + ").\nVerifique sua internet e tente de novo.");
+        this->setStatus(brls::getStr("common/connection_error", detail));
         return;
     }
 
     if (result.items.empty() && this->resultsContainer->getChildren().empty())
     {
-        this->setStatus("Nenhum resultado encontrado.");
+        this->setStatus("common/no_results"_i18n);
         return;
     }
 
@@ -190,7 +192,7 @@ void SearchTab::appendResults(const api::SearchResult& result)
     if (this->offset < this->knownTotal)
     {
         this->loadMoreButton = new brls::Button();
-        this->loadMoreButton->setText("Carregar mais");
+        this->loadMoreButton->setText("common/load_more"_i18n);
         this->loadMoreButton->setDimensions(brls::View::AUTO, 56.0f);
         this->loadMoreButton->setMargins(16.0f, 0.0f, 16.0f, 0.0f);
         this->loadMoreButton->registerClickAction([this](brls::View*) {

@@ -1,0 +1,8 @@
+{
+    "back": "Back",
+    "connection_error": "Connection error ({0}). Check your internet and try again.",
+    "load_more": "Load more",
+    "loading": "Loading...",
+    "no_results": "No results found.",
+    "no_title": "(no title)"
+}

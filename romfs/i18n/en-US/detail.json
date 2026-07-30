@@ -1,0 +1,14 @@
+{
+    "add_library": "+ Library",
+    "chapter_label": "Ch. {0}",
+    "chapters_header": "Chapters",
+    "choose_chapter_button": "Choose a chapter",
+    "continue_button": "Continue (Ch. {0})",
+    "external_suffix": " (official site only)",
+    "extra_chapter": "Extra",
+    "no_chapters": "No chapters available in the configured language.",
+    "pick_chapter_notify": "Choose a chapter from the list below.",
+    "read_from_start": "Read from start",
+    "remove_library": "- Library",
+    "volume_label": "Vol. {0} "
+}

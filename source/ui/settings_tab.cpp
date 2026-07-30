@@ -6,13 +6,20 @@
 #include "util/main_thread.hpp"
 #include "util/worker_thread.hpp"
 
+using namespace brls::literals;
+
 namespace ui
 {
 
 namespace
 {
     constexpr const char* kRatingIds[4] = { "safe", "suggestive", "erotica", "pornographic" };
-    constexpr const char* kRatingLabels[4] = { "Seguro", "Sugestivo", "Erótica", "Pornográfico" };
+    constexpr const char* kRatingLabelKeys[4] = {
+        "settings/rating_safe",
+        "settings/rating_suggestive",
+        "settings/rating_erotica",
+        "settings/rating_pornographic",
+    };
 
     // MangaDex translatedLanguage/availableTranslatedLanguage codes. Empty
     // code = no language filter at all (search/browse show every language,
@@ -68,7 +75,7 @@ SettingsTab::SettingsTab()
     this->setPadding(24.0f, 32.0f, 24.0f, 32.0f);
 
     brls::Label* ratingsHeader = new brls::Label();
-    ratingsHeader->setText("Classificação de conteúdo");
+    ratingsHeader->setText("settings/ratings_header"_i18n);
     ratingsHeader->setFontSize(22.0f);
     ratingsHeader->setHorizontalAlign(brls::HorizontalAlign::LEFT);
     this->addView(ratingsHeader);
@@ -80,7 +87,7 @@ SettingsTab::SettingsTab()
     for (int i = 0; i < 4; i++)
     {
         brls::Button* button = new brls::Button();
-        button->setText(kRatingLabels[i]);
+        button->setText(brls::getStr(kRatingLabelKeys[i]));
         button->setDimensions(180.0f, 56.0f);
         button->setMarginRight(12.0f);
 
@@ -96,7 +103,7 @@ SettingsTab::SettingsTab()
     this->addView(ratingsRow);
 
     brls::Label* qualityHeader = new brls::Label();
-    qualityHeader->setText("Qualidade das imagens");
+    qualityHeader->setText("settings/quality_header"_i18n);
     qualityHeader->setFontSize(22.0f);
     qualityHeader->setHorizontalAlign(brls::HorizontalAlign::LEFT);
     this->addView(qualityHeader);
@@ -106,7 +113,7 @@ SettingsTab::SettingsTab()
     qualityRow->setMarginBottom(24.0f);
 
     this->dataSaverButton = new brls::Button();
-    this->dataSaverButton->setText("Economia de dados");
+    this->dataSaverButton->setText("settings/quality_data_saver"_i18n);
     this->dataSaverButton->setDimensions(240.0f, 56.0f);
     this->dataSaverButton->setMarginRight(12.0f);
     this->dataSaverButton->registerClickAction([this](brls::View*) {
@@ -116,7 +123,7 @@ SettingsTab::SettingsTab()
     qualityRow->addView(this->dataSaverButton);
 
     this->dataButton = new brls::Button();
-    this->dataButton->setText("Qualidade original");
+    this->dataButton->setText("settings/quality_original"_i18n);
     this->dataButton->setDimensions(240.0f, 56.0f);
     this->dataButton->registerClickAction([this](brls::View*) {
         this->setImageQuality("data");
@@ -127,7 +134,7 @@ SettingsTab::SettingsTab()
     this->addView(qualityRow);
 
     brls::Label* languageHeader = new brls::Label();
-    languageHeader->setText("Idioma de busca e leitura");
+    languageHeader->setText("settings/language_header"_i18n);
     languageHeader->setFontSize(22.0f);
     languageHeader->setHorizontalAlign(brls::HorizontalAlign::LEFT);
     this->addView(languageHeader);
@@ -166,7 +173,7 @@ SettingsTab::SettingsTab()
     this->addView(languageRow);
 
     brls::Label* cacheHeader = new brls::Label();
-    cacheHeader->setText("Limite de cache no cartão SD");
+    cacheHeader->setText("settings/cache_header"_i18n);
     cacheHeader->setFontSize(22.0f);
     cacheHeader->setHorizontalAlign(brls::HorizontalAlign::LEFT);
     this->addView(cacheHeader);
@@ -202,10 +209,10 @@ SettingsTab::SettingsTab()
 
     brls::Button* clearButton = new brls::Button();
     clearButton->setStyle(&brls::BUTTONSTYLE_BORDERED);
-    clearButton->setText("Limpar cache agora");
+    clearButton->setText("settings/clear_cache_button"_i18n);
     clearButton->setDimensions(220.0f, 56.0f);
     clearButton->registerClickAction([this](brls::View*) {
-        this->statusLabel->setText("Limpando cache...");
+        this->statusLabel->setText("settings/clearing_cache"_i18n);
         this->statusLabel->setVisibility(brls::Visibility::VISIBLE);
 
         util::AliveFlag aliveCopy = this->alive;
@@ -214,7 +221,7 @@ SettingsTab::SettingsTab()
             util::runOnMainThread([this, aliveCopy]() {
                 if (aliveCopy->load())
                 {
-                    this->statusLabel->setText("Cache limpo.");
+                    this->statusLabel->setText("settings/cache_cleared"_i18n);
                 }
             });
         });

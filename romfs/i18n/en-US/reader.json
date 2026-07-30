@@ -1,0 +1,17 @@
+{
+    "chapters_load_failed": "Couldn't load the chapters. Check your connection.",
+    "first_chapter_notify": "This is the first available chapter.",
+    "header_chapter_suffix": " - Ch. {0}",
+    "hint": "D-pad/stick: page   ZL/ZR: chapter   Y: zoom   B: back",
+    "last_chapter_notify": "This is the last available chapter.",
+    "loading_chapters": "Loading chapters...",
+    "loading_page": "Loading page...",
+    "next_chapter": "Next chapter",
+    "next_page": "Next page",
+    "page_download_failed": "Failed to download the page.",
+    "pages_load_failed": "Failed to load the pages. Check your connection.",
+    "prev_chapter": "Previous chapter",
+    "prev_page": "Previous page",
+    "zoom_action": "Zoom",
+    "zoom_hint": "Zoom active: left stick pans the page (D-pad won't change page)"
+}

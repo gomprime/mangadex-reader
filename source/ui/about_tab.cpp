@@ -1,5 +1,7 @@
 #include "ui/about_tab.hpp"
 
+using namespace brls::literals;
+
 namespace ui
 {
 
@@ -39,15 +41,15 @@ AboutTab::AboutTab()
     this->setPadding(24.0f, 32.0f, 24.0f, 32.0f);
 
     this->addView(makeHeader("MangaDex Reader"));
-    this->addView(makeLine("Versão 1.0.0", false));
-    this->addView(makeLine("Por gomprime", true));
+    this->addView(makeLine("about/version"_i18n, false));
+    this->addView(makeLine("about/by"_i18n, true));
 
-    this->addView(makeHeader("Agradecimentos"));
+    this->addView(makeHeader("about/thanks_header"_i18n));
     this->addView(makeLine("CostelaBR", false));
     this->addView(makeLine("AurelioEB", true));
 
     brls::Label* footer = new brls::Label();
-    footer->setText("Leitor de mangás não-oficial usando a API pública do MangaDex.");
+    footer->setText("about/footer"_i18n);
     footer->setFontSize(14.0f);
     footer->setHorizontalAlign(brls::HorizontalAlign::LEFT);
     footer->setMarginTop(8.0f);
